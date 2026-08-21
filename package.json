@@ -1,0 +1,24 @@
+{
+  "name": "screeps",
+  "version": "1.0.0",
+  "description": "\"# Screeps\"",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SockStream/Screeps.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/SockStream/Screeps/issues"
+  },
+  "homepage": "https://github.com/SockStream/Screeps#readme",
+  "devDependencies": {
+    "@types/screeps": "^3.4.0"
+  }
+}
