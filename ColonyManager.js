@@ -50,12 +50,11 @@ function EstimerConsommation(spawn)
     const sites = room.find(FIND_CONSTRUCTION_SITES);
 
     //estimation de l'énergie nécessaire pour le remplacement des creeps
-    creeps.forEach(c => consommation += Utils.bodyCost(c.body) / c.ticksToLive);
-
+    creeps.forEach(c => consommation += Utils.getBodyCost(c.body) / c.ticksToLive);
     //estimation de l'énergie nécessaire pour la construction
     sites.forEach(s => consommation += CONSTRUCTION_COST[s.structureType] / GameSettings.Construction_time_planned)
-
-
+    
+    return consommation;
 }
 
 function manageSpawn(spawn)
@@ -75,7 +74,7 @@ function manageSpawn(spawn)
         CreateCreep(spawn,GameSettings.BasicHarvester,"harvester");
     }
 
-    harvesters.forEach(h => harvester.run(h));
+    //harvesters.forEach(h => harvester.run(h));
 }
 
 function run ()
@@ -90,6 +89,7 @@ function run ()
             "Energy :", room.energyAvailable
         );
         manageSpawn(spawn);
+        console.log(spawn.name, " consommation estimée: ", EstimerConsommation(spawn));
     }
 
 };

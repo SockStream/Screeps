@@ -1,12 +1,12 @@
 const bodyCost = {
-    MOVE: 50,
-    WORK: 100,
-    CARRY: 50,
-    ATTACK: 80,
-    RANGED_ATTACK: 150,
-    HEAL: 250,
-    CLAIM: 600,
-    TOUGH: 10
+    [MOVE]: 50,
+    [WORK]: 100,
+    [CARRY]: 50,
+    [ATTACK]: 80,
+    [RANGED_ATTACK]: 150,
+    [HEAL]: 250,
+    [CLAIM]: 600,
+    [TOUGH]: 10
 };
 
 function Manhattan(spawnName, target)
@@ -25,9 +25,8 @@ function getBodyCost(body) {
     let cost = 0;
 
     for (const part of body) {
-        cost += bodyCost[part];
+        cost += bodyCost[part.type];
     }
-
     return cost;
 }
 
