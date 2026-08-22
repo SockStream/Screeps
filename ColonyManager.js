@@ -16,6 +16,48 @@ function CreateCreep(spawn, body, role) //spawn,[WORK,CARRY,MOVE],"harvester"
     );
 }
 
+function estimateHarvesterIncome(creep) {
+
+    const distance = Utils.Manhattan(creep.memory.spawn, creep.memory.target);
+    const work = creep.getActiveBodyparts(WORK);
+    const carry = creep.getActiveBodyparts(CARRY);
+    const move = creep.getActiveBodyparts(MOVE);
+
+    const nonMoveParts = creep.body.length - move;
+
+    const speed = Math.min(
+        1,
+        (move * 2) / nonMoveParts
+    );
+
+    const harvestPerTick = work * 2;
+    const capacity = carry * CARRY_CAPACITY;
+
+    const harvestTicks = capacity / harvestPerTick;
+    const travelTicks = (distance * 2) / speed;
+
+    const cycleTicks = harvestTicks + travelTicks;
+
+    return capacity / cycleTicks;
+}
+
+function EstimerConsommation(spawn)
+{
+    const room = spawn.room;
+    var consommation = 0.0;
+    const creeps = Object.values(Game.creeps)
+    .filter(creep => creep.memory.spawn === spawn.name);
+    const sites = room.find(FIND_CONSTRUCTION_SITES);
+
+    //estimation de l'énergie nécessaire pour le remplacement des creeps
+    creeps.forEach(c => consommation += Utils.bodyCost(c.body) / c.ticksToLive);
+
+    //estimation de l'énergie nécessaire pour la construction
+    sites.forEach(s => consommation += CONSTRUCTION_COST[s.structureType] / GameSettings.Construction_time_planned)
+
+
+}
+
 function manageSpawn(spawn)
 {
     const creeps = Object.values(Game.creeps)
@@ -33,7 +75,7 @@ function manageSpawn(spawn)
         CreateCreep(spawn,GameSettings.BasicHarvester,"harvester");
     }
 
-    harvesters.forEach(h => h.run());
+    harvesters.forEach(h => harvester.run(h));
 }
 
 function run ()

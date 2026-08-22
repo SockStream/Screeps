@@ -9,6 +9,13 @@ const bodyCost = {
     TOUGH: 10
 };
 
+function Manhattan(spawnName, target)
+{
+    const spawn = Game.spawns[spawnName];
+    var distance = Math.abs( spawn.pos.x - target.pos.x) + Math.abs(spawn.pos.y - target.pos.y);
+    return distance;
+}
+
 function randomName(prefix) {
     return `${prefix}_${Math.random().toString(36).substring(2, 8)}`;
 }
@@ -25,6 +32,7 @@ function getBodyCost(body) {
 }
 
 module.exports = {
+    Manhattan,
     bodyCost,
     getBodyCost,
     randomName
