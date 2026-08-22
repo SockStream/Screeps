@@ -1,4 +1,4 @@
-const cout = {
+const bodyCost = {
     MOVE: 50,
     WORK: 100,
     CARRY: 50,
@@ -25,7 +25,7 @@ function getBodyCost(body) {
 }
 
 module.exports = {
-    cout,
+    bodyCost,
     getBodyCost,
     randomName
 };

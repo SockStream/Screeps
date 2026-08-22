@@ -1,16 +1,18 @@
 const Utils = require('./Utils');
+const GameSettings = require('GameSettings');
+
 
 function CreateCreep(spawn, body, role) //spawn,[WORK,CARRY,MOVE],"harvester"
 {
     spawn.spawnCreep(
-    body,
-    Utils.randomName(role),
-    {
-        memory: {
-            role: role,
-            spawn: spawn.name
+        body,
+        Utils.randomName(role),
+        {
+            memory: {
+                role: role,
+                spawn: spawn.name
+            }
         }
-    }
     );
 }
 
@@ -25,6 +27,13 @@ function manageSpawn(spawn)
         creeps.length,
         "creeps"
     );
+    const harvesters = creeps.filter(creep => creep.memory.role == "harvester");
+    if(!harvesters.length || (harvesters.length < GameSettings.maxHarvester && spawn.energyAvailable >= Utils.getBodyCost([WORK,MOVE,CARRY])))
+    {
+        CreateCreep(spawn,GameSettings.BasicHarvester,"harvester");
+    }
+
+    harvesters.forEach(h => h.run());
 }
 
 function run ()
