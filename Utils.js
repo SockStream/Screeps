@@ -9,10 +9,16 @@ const bodyCost = {
     [TOUGH]: 10
 };
 
-function Manhattan(spawnName, target)
+/**
+* @param {pos} pos1
+* @param {pos} pos2
+*/
+function Manhattan(pos1, pos2)
 {
-    const spawn = Game.spawns[spawnName];
-    var distance = Math.abs( spawn.pos.x - target.pos.x) + Math.abs(spawn.pos.y - target.pos.y);
+    console.log("pos1: ",pos1.x, ",", pos1.y);
+    console.log("pos2: ",pos2.x, ",", pos2.y);
+    var distance = Math.abs( pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
+    console.log("Manhattan ==> ",distance);
     return distance;
 }
 
