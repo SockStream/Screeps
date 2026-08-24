@@ -1,4 +1,6 @@
-const { cout } = require('Utils');
+// main.js : point d'entrée exécuté à chaque tick par Screeps
+// Appelle le ColonyManager pour gérer tous les spawns
+const { cout } = require('./Utils');
 const ColonyManager = require('./ColonyManager');
 
 module.exports.loop = function () {
@@ -14,6 +16,7 @@ module.exports.loop = function () {
 
     const room = spawn.room;
 
+    // Logs utiles pour suivre l'état du monde
     console.log("Tick :", Game.time);
     console.log("Nombre de creeps :", Object.keys(Game.creeps).length);
 };

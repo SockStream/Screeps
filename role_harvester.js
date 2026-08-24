@@ -1,8 +1,14 @@
+/* role_harvester.js
+ * Comportement d'un harvester : trouver une source, la récolter,
+ * puis transférer l'énergie vers une structure (spawn/extension/tower).
+ */
 const Utils = require('./Utils');
 
 /**
 * @param {Creep} creep
 */
+// Recherche la source la plus proche du creep en utilisant la distance de Manhattan.
+// Retourne l'objet Source (ou null si aucune source trouvée).
 function findClosestSource(creep)
 {
     var target = null;
@@ -24,11 +30,15 @@ function findClosestSource(creep)
 /**
 * @param {Creep} creep
 */
+// Comportement principal du harvester :
+// 1) Si on n'a pas de cible, on choisit la source la plus proche et on la stocke en mémoire
+// 2) Si on a une cible et de la place, on harvest la source (ou on se déplace si hors portée)
+// 3) Si le conteneur est plein, on transfère l'énergie vers la première structure admissible
 function run (creep)
 {
     console.log("creep name: ",creep.name);
     console.log("capacity =>", creep.store.getFreeCapacity());
-    if (creep.store.getCapacity() > 0 && !creep.memory.target) //on cherche la resource la plus proche
+    if (creep.store.getCapacity() > 0 && !creep.memory.target) // on cherche la ressource la plus proche
     {
         console.log("cas 1");
         const spawn = creep.memory.spawn;
@@ -36,11 +46,12 @@ function run (creep)
         console.log("source trouvée :", closestSource);
         console.log("source id :", closestSource ? closestSource.id : "NULL");
 
-        creep.memory.target = closestSource.id;
+        if (closestSource) creep.memory.target = closestSource.id;
     }
     if (creep.memory.target && creep.store.getFreeCapacity() > 0)
     {
-        console.log("harvest result :", code);
+        // ATTENTION: il y avait un console.log affichant 'code' avant qu'il ne soit défini.
+        // Cela semble être un oubli. Ici on appelle harvest puis on inspecte le code.
         console.log("target: ", creep.memory.target);
         const source = Game.getObjectById(creep.memory.target);
         var code = creep.harvest(source);
@@ -72,6 +83,9 @@ function run (creep)
 /**
 * @param {Creep} creep
 */
+// Retourne une estimation de l'apport en énergie par tick pour un harvester.
+// Basé sur : distance au spawn (coût de trajet), nombre de WORK/CARRY/MOVE actifs, etc.
+// Cette estimation est approximative mais utile pour la planification.
 function estimateHarvesterIncome(creep) {
     if(!creep.memory.target)
     {
@@ -105,6 +119,7 @@ function estimateHarvesterIncome(creep) {
     return capacity / cycleTicks;
 }
 
+// Export des fonctions du rôle
 module.exports = 
 {
     run,
