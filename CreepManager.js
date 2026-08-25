@@ -1,6 +1,6 @@
 /**
  * Controls creep behavior for harvesting, upgrading, building, and defense.
- * Spec: HARV-001, HARV-002, HARV-003, HARV-004, HARV-005, PRIORITY-003, PRIORITY-004
+ * Spec: HARV-001, HARV-002, HARV-003, HARV-004, HARV-005, HARV-006, HARV-007, PRIORITY-003, PRIORITY-004
  */
 class CreepManager {
   /**
@@ -58,7 +58,15 @@ class CreepManager {
       }
     }
 
-    const source = this.findAssignedSource(creep) || this.findNearestSource(creep);
+    let source = this.findAssignedSource(creep);
+    if (!source || !this.canReachSource(creep, source)) {
+      const nextSourceId = this.assignSourceId(creep, source && source.id);
+      if (nextSourceId) {
+        creep.memory.sourceId = nextSourceId;
+        source = Game.getObjectById(nextSourceId) || null;
+      }
+    }
+
     if (!source) {
       return;
     }
@@ -69,14 +77,38 @@ class CreepManager {
   }
 
   /**
+   * Checks whether a harvester has a valid path to a source.
+   * @param {Creep} creep The harvester to evaluate.
+   * @param {Source} source The source to verify.
+   * @returns {boolean}
+   */
+  static canReachSource(creep, source) {
+    if (!source) {
+      return false;
+    }
+
+    const path = creep.room.findPath(creep.pos, source.pos, {
+      ignoreCreeps: true,
+      ignoreRoads: false
+    });
+
+    return path.length > 0;
+  }
+
+  /**
    * Assigns a harvester to a source with a maximum of two harvesters per source.
    * @param {Creep} creep The harvester requesting a source.
+   * @param {string} [currentSourceId] The currently assigned source to avoid re-using unreachable sources.
    * @returns {string|null}
    */
-  static assignSourceId(creep) {
+  static assignSourceId(creep, currentSourceId) {
     const sources = creep.room.find(FIND_SOURCES);
 
     for (const source of sources) {
+      if (source.id === currentSourceId) {
+        continue;
+      }
+
       const assigned = Object.values(Game.creeps).filter((candidate) =>
         candidate.memory.role === 'harvester' &&
         candidate.memory.sourceId === source.id &&

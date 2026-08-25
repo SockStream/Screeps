@@ -38,10 +38,16 @@ class SpawnManager {
    * @returns {number}
    */
   getTargetCount(role) {
-    const targets = this.memory.targets || { harvester: 2, builder: 1, upgrader: 1, defender: 0, attacker: 0 };
+    const targets = this.memory.targets || { harvester: 2, builder: 1, upgrader: 2, defender: 0, attacker: 0 };
 
     if (role === 'harvester') {
       return Math.max(targets.harvester || 2, this.room.find(FIND_SOURCES).length * 2);
+    }
+
+    if (role === 'upgrader') {
+      const controller = this.room.controller;
+      const minimum = controller && controller.my ? Math.max(1, this.room.find(FIND_SOURCES).length) : 0;
+      return Math.max(targets.upgrader || minimum, minimum);
     }
 
     return targets[role] || 0;

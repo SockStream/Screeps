@@ -28,7 +28,7 @@ class RoomManager {
     this.memory.targets = this.memory.targets || {
       harvester: Math.max(2, sourceCount * 2),
       builder: Math.max(1, sourceCount),
-      upgrader: 2,
+      upgrader: Math.max(2, sourceCount),
       defender: 0,
       attacker: 0
     };
