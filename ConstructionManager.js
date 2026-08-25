@@ -2,6 +2,8 @@
  * Handles room construction priorities, roads, and storage/extension placement.
  * Spec: CONST-001, CONST-002, CONST-003, CONST-004
  */
+const pathUtil = require('utils/path');
+
 class ConstructionManager {
   /**
    * Creates a construction manager for one room.
@@ -27,7 +29,10 @@ class ConstructionManager {
   }
 
   /**
-   * Creates roads along source-to-spawn paths while skipping walls and avoiding construction conflicts.
+   * Creates roads along source-to-spawn paths while respecting the tolerance defined in the spec
+   * (walls must not increase the minimal path by more than 20%). If the existing path is longer
+   * than the allowed tolerance compared to the ideal path (ignoring walls), road creation for that
+   * source is skipped and a warning is logged.
    * @returns {void}
    */
   ensureRoads() {
@@ -37,6 +42,23 @@ class ConstructionManager {
     }
 
     for (const source of this.room.find(FIND_SOURCES)) {
+      // compute ideal and current path lengths
+      const idealLen = pathUtil.computePathLength(this.room, source.pos, spawn.pos, true);
+      const currentLen = pathUtil.computePathLength(this.room, source.pos, spawn.pos, false);
+
+      if (!currentLen || currentLen === 0) {
+        // no path currently exists, skip road creation for this source
+        console.log(`[CONST] Room ${this.room.name}: no current path between source ${source.id} and spawn, skipping roads.`);
+        continue;
+      }
+
+      if (currentLen > Math.ceil(idealLen * 1.2)) {
+        // violation of the 20% tolerance — log and skip
+        console.log(`[CONST] Room ${this.room.name}: path between source ${source.id} and spawn increases by more than 20% due to walls (${currentLen} > ${Math.ceil(idealLen * 1.2)}). Skipping road creation for this source.`);
+        continue;
+      }
+
+      // proceed to create roads along the current path, skipping wall tiles
       const path = this.room.findPath(source.pos, spawn.pos, {
         ignoreCreeps: true,
         ignoreRoads: false

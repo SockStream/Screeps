@@ -2,6 +2,8 @@
  * Controls creep behavior for harvesting, upgrading, building, and defense.
  * Spec: HARV-001, HARV-002, HARV-003, HARV-004, HARV-005, HARV-006, HARV-007, PRIORITY-003, PRIORITY-004
  */
+const pathUtil = require('utils/path');
+
 class CreepManager {
   /**
    * Runs the behavior loop for creeps in the selected room.
@@ -87,12 +89,17 @@ class CreepManager {
       return false;
     }
 
-    const path = creep.room.findPath(creep.pos, source.pos, {
-      ignoreCreeps: true,
-      ignoreRoads: false
-    });
+    // compute the ideal (ignoring walls) and current path lengths using shared util
+    const ideal = pathUtil.computePathLength(creep.room, creep.pos, source.pos, true);
+    const current = pathUtil.computePathLength(creep.room, creep.pos, source.pos, false);
 
-    return path.length > 0;
+    // if no current path exists, the source is unreachable
+    if (!current || current === 0) {
+      return false;
+    }
+
+    // allow up to 20% increase in path length due to walls
+    return current <= Math.ceil(ideal * 1.2);
   }
 
   /**
