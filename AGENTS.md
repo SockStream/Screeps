@@ -29,10 +29,15 @@
 
 - Toute nouvelle fonctionnalité doit avoir sa spécification dans `specs/`.
 - Toute modification d'une règle existante doit modifier la spécification correspondante.
-- Le code doit être commenté lorsque la logique n'est pas évidente.
+- Le code doit être commenté.
 - Les commentaires doivent expliquer les choix et la logique importante, et non simplement décrire le code.
 - Le code doit contenir la référence à la spécification utilisée pour générer ou modifier ce code.
 - Les références aux spécifications doivent utiliser leur identifiant lorsqu'un identifiant existe.
+- Toutes les fonctions doivent être documentées avec un bloc JSDoc.
+- Le bloc JSDoc doit être placé immédiatement avant la déclaration de la fonction.
+- Le bloc JSDoc doit décrire le rôle de la fonction, ses paramètres et sa valeur de retour.
+- Chaque paramètre doit être documenté avec `@param` et son type.
+- La valeur de retour doit être documentée avec `@returns` et son type lorsque la fonction retourne une valeur.
 
 ## Gestion du contexte
 
