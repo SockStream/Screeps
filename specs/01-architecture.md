@@ -17,8 +17,7 @@ Exemples :
 
 ## Règle
 
-Un manager ne doit pas directement gérer la logique
-appartenant à un autre domaine.
+Un manager ne doit pas directement gérer la logique appartenant à un autre domaine.
 
 ## Mémoire
 

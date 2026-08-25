@@ -2,11 +2,11 @@
 
 ## Objectif
 
-Les harvesters assurent l'approvisionnement en énergie
-de la room.
+Les harvesters assurent l'approvisionnement en énergie de la room.
 
 ## HARV-001
 Chaque harvester doit être affecté à une source.
+
 ## HARV-002
 Une source peut accueillir au maximum 2 harvesters.
 
