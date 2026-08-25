@@ -2,7 +2,7 @@
  * Controls creep behavior for harvesting, upgrading, building, and defense.
  * Spec: HARV-001, HARV-002, HARV-003, HARV-004, HARV-005, HARV-006, HARV-007, PRIORITY-003, PRIORITY-004
  */
-const pathUtil = require('utils/path');
+const pathUtil = require('./utils.path');
 
 class CreepManager {
   /**

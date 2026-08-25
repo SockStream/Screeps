@@ -46,7 +46,6 @@ function computePathLength(room, startPos, endPos, ignoreWalls) {
 
     return res.path ? res.path.length : 0;
   } catch (e) {
-    // fallback to room.findPath if PathFinder fails
     const p = room.findPath(startPos, endPos, { ignoreCreeps: true });
     return p ? p.length : 0;
   }

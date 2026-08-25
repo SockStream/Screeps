@@ -2,7 +2,7 @@
  * Handles room construction priorities, roads, and storage/extension placement.
  * Spec: CONST-001, CONST-002, CONST-003, CONST-004
  */
-const pathUtil = require('utils/path');
+const pathUtil = require('./utils.path');
 
 class ConstructionManager {
   /**
